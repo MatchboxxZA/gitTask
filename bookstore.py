@@ -8,31 +8,38 @@ data_dir = os.path.join(script_dir, 'data')
 db_path = os.path.join(data_dir, 'ebookstore.db')
 
 #check if there is a database and creates one if not. 
-if not os.path.exists(data_dir):
-    os.makedirs(data_dir)
+if not os.path.exists(data_dir) or not os.path.exists(db_path):
+
+    #create a directory for the database
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+
+    #Creating the Link to  the Database
+    db = sqlite3.connect(db_path)
+
+    #Defining a reference to the cursor
+    cursor = db.cursor()
+    
+    try:
+        cursor.execute('CREATE TABLE book(id INTEGER PRIMARY KEY, title VARCHAR, author VARCHAR, qty INT)')
+        cursor.execute('INSERT INTO book (id, title, author, qty) VALUES (2999, "New Table", "New Table", 0)')
+    
+    except Exception as e:
+        print(e)
+    finally:
+        db.commit()
 
 else:
-    print('hello')
+    #Creating the Link to  the Database
+    db = sqlite3.connect(db_path)
+    #Defining a reference to the cursor
+    cursor = db.cursor()  
 
-#Creating the Link to  the Database
-db = sqlite3.connect(db_path)
-#Defining a reference to the cursor
-cursor = db.cursor()
+
+
 
 #Try exception to catch Database already exhists error
-try:
-    cursor.execute('CREATE TABLE book(id INTEGER PRIMARY KEY, title VARCHAR, author VARCHAR, qty INT)')
-    cursor.execute('INSERT INTO book (id, title, author, qty) VALUES (3001, "A Tale of Two Cities", "Charles Dickens", 30)')
-    cursor.execute('INSERT INTO book (id, title, author, qty) VALUES (3002, "Harry Potter and the Philosophers Stone", "J.K. Rowling", 40)')
-    cursor.execute('INSERT INTO book (id, title, author, qty) VALUES (3003, "The Lion, the Witch and the Wardrobe", "C.S Lewis", 25)')
-    cursor.execute('INSERT INTO book (id, title, author, qty) VALUES (3004, "The Lord of the Rings", "J.R.R Tolkien", 37)')
-    cursor.execute('INSERT INTO book (id, title, author, qty) VALUES (3005, "Alice in Wonderland", "Lewis Carroll", 12)')
-    print('Table book Cretaed')
-    
-except Exception as e:
-    print(e)
-finally:
-    db.commit()
+
 
 #A function to add a book  to  the DB    
 def add_book():
