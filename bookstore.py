@@ -123,6 +123,23 @@ author: {row[2]}
 Stock: {row[3]}''')
  
     return
+
+#Fetches the SUM of all qty's in the database
+def total_qty():
+    
+    cursor.execute("SELECT SUM(qty) FROM book ")
+    total = cursor.fetchone()
+
+    #check to make sure the result is not Null
+    if total and total[0] is not None:
+        sum_qty = int(total[0])
+        print(f"\nTotal Quantity on hand\nTotal: {sum_qty}\n")
+
+    else:
+        print("The total QTY is Null")
+
+
+    return
             
 #Start a loop for continues interactions on the DB
 while True:
@@ -133,7 +150,8 @@ What would you like to do:
 2) Update Book
 3) Delete Book
 4) Search Books
-5) List all Books                     
+5) List all Books
+6) Total QTY                    
 0) Exit
 Selection: """))
     
@@ -157,6 +175,9 @@ Selection: """))
         
     elif menu == 5:
         list_all()
+
+    elif menu == 6:
+        total_qty()
     
     elif menu == 0:
         db.close()
